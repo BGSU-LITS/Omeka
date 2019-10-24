@@ -42,7 +42,11 @@ echo flash();
         <h2><?php echo __('Editing Tags'); ?></h2>
         
         <ol>
-            <li><?php echo __('To view all items with a tag, click the number.'); ?></li>
+            <?php if($browse_for != 'All'): ?>
+                <li><?php echo __('To view all %s with a tag, click the number of tagged records.', strtolower(Inflector::pluralize($browse_for))); ?></li>
+            <?php else: ?>
+                <li><?php echo __('To view all records with a tag, first select a record type.'); ?></li>
+            <?php endif; ?>
             <li><?php echo __('To edit the tag name, click the name and begin editing, and hit "enter" to save. To cancel an edit, click the ESC key or click away from the tag.'); ?></li>
             <li><?php echo __('To delete a tag, click the X. Deleting a tag will not delete the tagged items.'); ?></li>
         </ol>
@@ -85,8 +89,8 @@ echo flash();
         <ul class="tag-list">
         <?php foreach ($tags as $tag): ?>
             <li>
-            <?php if($browse_for == 'Item'):?>
-                <a href="<?php echo html_escape(url('items/browse', array('tags' => $tag->name))); ?>" class="count"><?php echo $tag['tagCount']; ?></a>
+            <?php if($browse_for != 'All'): ?>
+                <?php echo link_to(strtolower(Inflector::pluralize($browse_for)), 'browse', $tag['tagCount'], array('class' => 'count'), array('tags' => $tag->name)); ?>
             <?php else: ?>
                 <span class="count"><?php echo $tag['tagCount']; ?></span>
             <?php endif; ?>
